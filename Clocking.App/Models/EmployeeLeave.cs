@@ -7,5 +7,12 @@ namespace Clocking.App.Models
 {
     public class EmployeeLeave
     {
+        public int EmployeeID { get; set; }
+        public string LeaveType { get; set; }
+
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set;}
+
+
     }
 }
