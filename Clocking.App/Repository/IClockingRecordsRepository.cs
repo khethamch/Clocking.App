@@ -13,7 +13,7 @@ namespace Clocking.App.Repository
         Task UpdateRecord(ClockingRecord record);
         Task DeleteRecord(int employeeID);
         Task GetRecord(int employeeID);
-        
+        Task GetRecords();
 
     }
 }

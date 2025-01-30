@@ -12,5 +12,7 @@ namespace Clocking.App.Repository
         Task AddEmployee(Employee employee);
         Task UpdateEmployee(Employee employee);
         Task DeleteEmployee(int employeeId);
+        Task GetEmployee(int employeeId);
+        Task GetEmployees();
     }
 }

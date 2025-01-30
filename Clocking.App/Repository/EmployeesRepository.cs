@@ -21,5 +21,16 @@ namespace Clocking.App.Repository
             throw new NotImplementedException();
         }
 
+        public Task GetEmployee(int employeeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task GetEmployees()
+        {
+            throw new NotImplementedException();
+        }
+
     }
+
 }

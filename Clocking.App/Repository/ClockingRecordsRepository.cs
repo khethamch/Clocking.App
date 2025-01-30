@@ -26,5 +26,10 @@ namespace Clocking.App.Repository
             throw new NotImplementedException();
         }
 
+        public Task GetRecords()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
