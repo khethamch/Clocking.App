@@ -1,36 +1,64 @@
 ﻿using Clocking.App.Models;
-using System;
+using Dapper;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using System.Data.SqlClient;
 
 namespace Clocking.App.Repository
 {
     public class EmployeesRepository : IEmployeesRepository
     {
-        public Task AddEmployee(Employee employee)
+        private readonly string _connectionString;
+
+        public EmployeesRepository(IConfiguration configuration)
         {
-            throw new NotImplementedException();
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public Task UpdateEmployee(Employee employee)
+        public async Task AddEmployee(Employee employee)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "INSERT INTO Employees (FirstName, LastName, Email, Contact, Position, DepartmentID) VALUES (@FirstName, @LastName, @Email, @Contact, @Position, @DepartmentID)";
+                await connection.ExecuteAsync(query, employee);
+            }
         }
 
-        public Task DeleteEmployee(int employeeId)
+        public async Task UpdateEmployee(Employee employee)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "UPDATE Employees SET FirstName = @FirstName, LastName = @LastName, Email = @Email, Contact = @Contact, Position = @Position, DepartmentID = @DepartmentID WHERE Id = @Id";
+                await connection.ExecuteAsync(query, employee);
+            }
         }
 
-        public Task GetEmployee(int employeeId)
+        public async Task DeleteEmployee(int employeeId)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "DELETE FROM Employees WHERE Id = @Id";
+                await connection.ExecuteAsync(query, new { Id = employeeId });
+            }
         }
 
-        public Task GetEmployees()
+        public async Task<Employee> GetEmployee(int employeeId)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "SELECT * FROM Employees WHERE Id = @Id";
+                return await connection.QueryFirstOrDefaultAsync<Employee>(query, new { Id = employeeId });
+            }
         }
 
+        public async Task<IEnumerable<Employee>> GetEmployees()
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "SELECT * FROM Employees";
+                return await connection.QueryAsync<Employee>(query);
+            }
+        }
     }
-
 }

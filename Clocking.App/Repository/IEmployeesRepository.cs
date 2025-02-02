@@ -1,8 +1,5 @@
 ﻿using Clocking.App.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Clocking.App.Repository
@@ -12,7 +9,7 @@ namespace Clocking.App.Repository
         Task AddEmployee(Employee employee);
         Task UpdateEmployee(Employee employee);
         Task DeleteEmployee(int employeeId);
-        Task GetEmployee(int employeeId);
-        Task GetEmployees();
+        Task<Employee> GetEmployee(int employeeId);
+        Task<IEnumerable<Employee>> GetEmployees();
     }
 }
