@@ -12,7 +12,7 @@ namespace Clocking.App.Repository
         Task CreateEmployeeLeave(EmployeeLeave employeeLeave);
         Task UpdateEmployeeLeave(EmployeeLeave employeeLeave);
         Task DeleteEmployeeLeave(int EmployeeID);
-        Task GetEmployeeLeave(int EmployeeID);
-        Task GetEmployeeLeaves();
+        Task <EmployeeLeave> GetEmployeeLeave(int EmployeeID);
+        Task <IEnumerable<EmployeeLeave>> GetEmployeeLeaves();
     }
 }

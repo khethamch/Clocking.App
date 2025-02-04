@@ -1,6 +1,9 @@
 ﻿using Clocking.App.Models;
+using Dapper;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -9,29 +12,67 @@ namespace Clocking.App.Repository
 {
     public class EmployeeLeaveRepository : IEmployeeLeaveRepository
     {
-        public Task CreateEmployeeLeave(EmployeeLeave employeeLeave)
+        private readonly string _connectionString;
+
+        public EmployeeLeaveRepository(IConfiguration configuration)
         {
-            throw new NotImplementedException();
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public Task DeleteEmployeeLeave(int EmployeeID)
+        public object EmployeeId { get; private set; }
+
+        public async Task CreateEmployeeLeave(EmployeeLeave employeeLeave)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "INSERT INTO EmployeeLeave (EmployeeID, LeaveType, StartDate, EndDate ) VALUES (@EmployeeID, @LeaveType, @StartDate, @EndDate)";
+                await connection.ExecuteAsync(query, employeeLeave);
+            }
+           
         }
 
-        public Task GetEmployeeLeave(int EmployeeID)
+        public async Task DeleteEmployeeLeave(int EmployeeID)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "DELETE FROM EmployeeLeave WHERE Id = @ID";
+                await connection.ExecuteAsync(query, new { Id = EmployeeId });
+            }
+         
         }
 
-        public Task GetEmployeeLeaves()
+        public async Task<EmployeeLeave> GetEmployeeLeave(int EmployeeID)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "SELECT * FROM EmployeeLeave WHERE Id = @Id";
+                return await connection.QueryFirstOrDefaultAsync<EmployeeLeave>(query, new { Id = EmployeeId });
+            }
+            
         }
 
-        public Task UpdateEmployeeLeave(EmployeeLeave employeeLeave)
+        public async Task<IEnumerable<EmployeeLeave>> GetEmployeeLeaves()
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "SELECT * FROM EmployeeLeave";
+                return await connection.QueryAsync<EmployeeLeave>(query);
+
+            }
+
+           
         }
+
+        public async Task UpdateEmployeeLeave(EmployeeLeave employeeLeave)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "UPDATE  EmployeeLeave SET  EmployeeId = @EmployeeId LeaveType = @LeaveType, StartDate = @StartDate, EndDate = @EndDate  WHERE Id = @Id";
+                await connection.ExecuteAsync(query, employeeLeave);
+            }
+
+            
+        }
+
     }
 }

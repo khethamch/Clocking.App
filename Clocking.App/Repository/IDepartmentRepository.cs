@@ -12,8 +12,8 @@ namespace Clocking.App.Repository
         Task CreateDepartment(Department department);
         Task UpdateDepartment(Department department);
         Task DeleteDepartment(int ID);
-        Task GetDepartment(int ID);
-        Task GetDepartments();
+        Task<Department> GetDepartment(int ID);
+        Task<IEnumerable< Department>> GetDepartments();
 
     }
 }
