@@ -12,8 +12,8 @@ namespace Clocking.App.Repository
         Task CreateRecord(ClockingRecord record);
         Task UpdateRecord(ClockingRecord record);
         Task DeleteRecord(int employeeID);
-        Task GetRecord(int employeeID);
-        Task GetRecords();
+        Task<ClockingRecord> GetRecord(int employeeID);
+        Task<IEnumerable<ClockingRecord>> GetRecords();
 
     }
 }

@@ -1,37 +1,66 @@
 ﻿using Clocking.App.Models;
-using System;
+using Dapper;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
+using Microsoft.Extensions.Configuration;
+using System.Data.SqlClient;
 
 namespace Clocking.App.Repository
 {
     public class CompanyRepository : ICompanyRepository
     {
-        public Task CreateCompany(Company company)
+        private readonly string _connectionString;
+
+        public CompanyRepository(IConfiguration configuration)
         {
-            throw new NotImplementedException();
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public Task DeleteCompany(int companyId)
+        public async Task CreateCompany(Company company)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_connectionString)) 
+            {
+                var query = "INSERT INTO Company (Name, RegistrationNumber, DateCreated, ContactNumber, EmailAddress, IsActive) VALUES(@Name, @RegistrationNumber, @DateCreated, @ContactNumber, @EmailAddress, @IsActive)";
+                await connection.ExecuteAsync(query, company);
+            }
         }
 
-        public Task GetCompanies()
+        public async Task UpdateCompany(Company company)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "UPDATE Company SET Name = @Name, RegistrationNumber = @RegistrationNumber, DateCreated = @DateCreated, ContactNumber = @ContactNumber, EmailAddress = @EmailAddress, IsActive = @IsActive WHERE Id = @Id";
+                await connection.ExecuteAsync(query, company);
+            }
         }
 
-        public Task GetCompany(int companyId)
+        public async Task DeleteCompany(int companyId)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "DELETE FROM Company WHERE Id = @Id";
+                await connection.ExecuteAsync(query, new { Id = companyId });
+            }
         }
 
-        public Task UpdateCompany(Company company)
+        public async Task<Company> GetCompany(int companyId)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "SELECT * FROM Company WHERE Id = @Id";
+                return await connection.QueryFirstOrDefaultAsync<Company>(query, new { Id = companyId });
+            }
         }
+
+        public async Task<IEnumerable<Company>> GetCompanies()
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "SELECT * FROM Company";
+                return await connection.QueryAsync<Company>(query);
+            }
+        }
+
+        
     }
 }

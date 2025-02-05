@@ -5,6 +5,8 @@ VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clocking.App", "Clocking.App\Clocking.App.csproj", "{06C5DEE8-9965-49A1-8A59-04F4C8A0790B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "..\..\..\OneDrive\Documentos\Dev work\HelloWorld\HelloWorld.csproj", "{42D7675E-3A58-4FC3-BFEC-D9A3F0362AEC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{06C5DEE8-9965-49A1-8A59-04F4C8A0790B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06C5DEE8-9965-49A1-8A59-04F4C8A0790B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06C5DEE8-9965-49A1-8A59-04F4C8A0790B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42D7675E-3A58-4FC3-BFEC-D9A3F0362AEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42D7675E-3A58-4FC3-BFEC-D9A3F0362AEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42D7675E-3A58-4FC3-BFEC-D9A3F0362AEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42D7675E-3A58-4FC3-BFEC-D9A3F0362AEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

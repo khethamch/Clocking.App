@@ -1,34 +1,65 @@
 ﻿using Clocking.App.Models;
-using System;
+using Dapper;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using System.Data.SqlClient;
+
 
 namespace Clocking.App.Repository
 {
     public class ClockingRecordsRepository : IClockingRecordsRepository
     {
-        public Task CreateRecord(ClockingRecord record)
+        private readonly string _connectionString;
+
+        public ClockingRecordsRepository(IConfiguration configuration) 
         {
-            throw new NotImplementedException();
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public Task UpdateRecord(ClockingRecord record)
+        public async Task CreateRecord(ClockingRecord record)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_connectionString)) 
+            {
+                var query = "INSERT INTO ClockingRecord (EmployeeID, EmployeeName, Department, TimeIn, TimeOut) VALUES (@EmployeeID, @EmployeeName, @Department, @TimeIn, @TimeOut)";
+                await connection.ExecuteAsync(query, record);
+            }
         }
 
-        public Task DeleteRecord(int employeeID)
+        public async Task UpdateRecord(ClockingRecord record)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "UPDATE ClockingRecord SET EmployeeID = @EmployeeID, EmployeeName = @EmployeeName, Department = @Department, TimeIn= @TimeIn, Timeout = @Timeout";
+                await connection.ExecuteAsync(query, record);
+            }
         }
 
-        public Task GetRecord(int employeeID)
+        public async Task DeleteRecord(int employeeID)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "DELETE FROM ClockingRecord WHERE EmployeeID = @EmployeeID";
+                await connection.ExecuteAsync(query, new { EmployeeID = employeeID });
+            }
         }
 
-        public Task GetRecords()
+        public async Task<ClockingRecord> GetRecord(int employeeID)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "SELECT * FROM ClockingRecord WHERE EmployeeID = @EmployeeID";
+                return await connection.QueryFirstOrDefaultAsync<ClockingRecord>(query, new { EmployeeID = employeeID });
+            }
+        }
+
+        public async Task<IEnumerable<ClockingRecord>> GetRecords()
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "SELECT * FROM ClockingRecord";
+                return await connection.QueryAsync<ClockingRecord>(query);
+            }
         }
 
     }

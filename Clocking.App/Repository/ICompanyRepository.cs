@@ -12,7 +12,7 @@ namespace Clocking.App.Repository
         Task CreateCompany(Company company);
         Task UpdateCompany(Company company);
         Task DeleteCompany(int Id);
-        Task GetCompany(int Id);
-        Task GetCompanies();
+        Task<Company> GetCompany(int Id);
+        Task<IEnumerable<Company>> GetCompanies();
     }
 }
